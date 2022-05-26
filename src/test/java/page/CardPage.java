@@ -13,7 +13,6 @@ import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
 
 public class CardPage {
-    private ElementsCollection heading = $$("h3");
     private SelenideElement cardNumber = $("[placeholder='0000 0000 0000 0000']");
     private SelenideElement month = $("[placeholder='08']");
     private SelenideElement year = $("[placeholder='22']");
@@ -23,7 +22,9 @@ public class CardPage {
 
     public CardPage() {
         $$("button").filter(text("Купить")).first().click();
-        heading.last().shouldBe(visible).shouldHave(exactText("Оплата по карте"));
+        if (!$$(".heading").find(text("Оплата по карте")).isDisplayed()){
+            throw new RuntimeException("oops, heading not displayed");
+        };
     }
 
     @Step("Отправка заполненной формы покупки по карте")
